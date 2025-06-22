@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import heLocale from 'date-fns/locale/he';
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+import Container from '@mui/material/Container'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import heLocale from 'date-fns/locale/he'
 
 function App() {
   const [targetDate, setTargetDate] = useState(null);
@@ -33,12 +34,13 @@ function App() {
   }, [targetDate]);
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'linear-gradient(135deg, #e0f7fa 0%, #fff 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Paper elevation={6} sx={{ p: 5, borderRadius: 5, minWidth: 350, maxWidth: 420, textAlign: 'center', bgcolor: '#f8fffa' }}>
-        <Typography variant="h3" fontWeight={700} color="#00b894" mb={3}>
-          <AccessTimeIcon sx={{ fontSize: 40, verticalAlign: 'middle', mr: 1 }} />
-          טיימר עד תאריך עתידי
-        </Typography>
+    <Box sx={{ minHeight: '100vh', bgcolor: 'linear-gradient(135deg, #e0f7fa 0%, #fff 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
+      <Container maxWidth="sm">
+        <Paper elevation={6} sx={{ p: 5, borderRadius: 5, textAlign: 'center', bgcolor: 'background.paper' }}>
+          <Typography variant="h3" fontWeight={700} color="primary.main" mb={3}>
+            <AccessTimeIcon sx={{ fontSize: 40, verticalAlign: 'middle', mr: 1 }} />
+            טיימר עד תאריך עתידי
+          </Typography>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={heLocale}>
           <DateTimePicker
             label="בחר תאריך ושעה"
@@ -50,38 +52,39 @@ function App() {
         </LocalizationProvider>
         {targetDate && (
           <Box>
-            <Typography variant="h5" color="#009e6e" fontWeight={600} mb={2}>
+            <Typography variant="h5" color="secondary.main" fontWeight={600} mb={2}>
               נותרו:
             </Typography>
             <Grid container spacing={2} justifyContent="center">
               <Grid item>
-                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: '#eafff3' }}>
-                  <Typography variant="h4" color="#00b894" fontWeight={700}>{timeLeft.days}</Typography>
-                  <Typography color="#009e6e">ימים</Typography>
+                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary.light' }}>
+                  <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.days}</Typography>
+                  <Typography color="secondary.main">ימים</Typography>
                 </Paper>
               </Grid>
               <Grid item>
-                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: '#eafff3' }}>
-                  <Typography variant="h4" color="#00b894" fontWeight={700}>{timeLeft.hours}</Typography>
-                  <Typography color="#009e6e">שעות</Typography>
+                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary.light' }}>
+                  <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.hours}</Typography>
+                  <Typography color="secondary.main">שעות</Typography>
                 </Paper>
               </Grid>
               <Grid item>
-                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: '#eafff3' }}>
-                  <Typography variant="h4" color="#00b894" fontWeight={700}>{timeLeft.minutes}</Typography>
-                  <Typography color="#009e6e">דקות</Typography>
+                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary.light' }}>
+                  <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.minutes}</Typography>
+                  <Typography color="secondary.main">דקות</Typography>
                 </Paper>
               </Grid>
               <Grid item>
-                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: '#eafff3' }}>
-                  <Typography variant="h4" color="#00b894" fontWeight={700}>{timeLeft.seconds}</Typography>
-                  <Typography color="#009e6e">שניות</Typography>
+                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary.light' }}>
+                  <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.seconds}</Typography>
+                  <Typography color="secondary.main">שניות</Typography>
                 </Paper>
               </Grid>
             </Grid>
           </Box>
         )}
-      </Paper>
+        </Paper>
+      </Container>
     </Box>
   );
 }
