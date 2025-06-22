@@ -19,6 +19,22 @@ function App() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    const savedTarget = localStorage.getItem('targetDate');
+    const savedStart = localStorage.getItem('startDate');
+    if (savedTarget && savedStart) {
+      const target = new Date(savedTarget);
+      const start = new Date(savedStart);
+      if (target > new Date()) {
+        setTargetDate(target);
+        setStartDate(start);
+      } else {
+        localStorage.removeItem('targetDate');
+        localStorage.removeItem('startDate');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (!targetDate || !startDate) return;
     const interval = setInterval(() => {
       const now = new Date();
@@ -36,6 +52,8 @@ function App() {
       } else {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         setProgress(100);
+        localStorage.removeItem('targetDate');
+        localStorage.removeItem('startDate');
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -54,9 +72,14 @@ function App() {
               label="בחר תאריך ושעה"
               value={targetDate}
               onChange={(value) => {
+                const now = new Date();
                 setTargetDate(value);
-                setStartDate(new Date());
+                setStartDate(now);
                 setProgress(0);
+                if (value) {
+                  localStorage.setItem('targetDate', value.toISOString());
+                  localStorage.setItem('startDate', now.toISOString());
+                }
               }}
               renderInput={(params) => <TextField {...params} sx={{ mb: 4, width: '100%', }} />}
               ampm={false}
