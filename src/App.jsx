@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import Container from '@mui/material/Container'
+import LinearProgress from '@mui/material/LinearProgress'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
@@ -13,14 +14,20 @@ import heLocale from 'date-fns/locale/he'
 
 function App() {
   const [targetDate, setTargetDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (!targetDate) return;
+    if (!targetDate || !startDate) return;
     const interval = setInterval(() => {
       const now = new Date();
       const diff = targetDate - now;
       if (diff > 0) {
+        const total = targetDate - startDate;
+        const passed = now - startDate;
+        const progressValue = Math.min(100, Math.max(0, (passed / total) * 100));
+        setProgress(progressValue);
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((diff / (1000 * 60)) % 60);
@@ -28,10 +35,11 @@ function App() {
         setTimeLeft({ days, hours, minutes, seconds });
       } else {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        setProgress(100);
       }
     }, 1000);
     return () => clearInterval(interval);
-  }, [targetDate]);
+  }, [targetDate, startDate]);
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'linear-gradient(135deg, #e0f7fa 0%, #fff 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', p: 2 }}>
@@ -45,13 +53,25 @@ function App() {
           <DateTimePicker
             label="בחר תאריך ושעה"
             value={targetDate}
-            onChange={setTargetDate}
+            onChange={(value) => {
+              setTargetDate(value);
+              setStartDate(new Date());
+              setProgress(0);
+            }}
             renderInput={(params) => <TextField {...params} sx={{ mb: 4, width: '100%' }} />}
             ampm={false}
           />
         </LocalizationProvider>
         {targetDate && (
           <Box>
+            <LinearProgress
+              variant="determinate"
+              value={progress}
+              sx={{ height: 10, borderRadius: 5, mb: 2 }}
+            />
+            <Typography variant="body2" color="text.secondary" mb={1}>
+              {progress.toFixed(0)}%
+            </Typography>
             <Typography variant="h5" color="secondary.main" fontWeight={600} mb={2}>
               נותרו:
             </Typography>
