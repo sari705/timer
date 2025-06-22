@@ -49,60 +49,61 @@ function App() {
             <AccessTimeIcon sx={{ fontSize: 40, verticalAlign: 'middle', mr: 1 }} />
             טיימר עד תאריך עתידי
           </Typography>
-        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={heLocale}>
-          <DateTimePicker
-            label="בחר תאריך ושעה"
-            value={targetDate}
-            onChange={(value) => {
-              setTargetDate(value);
-              setStartDate(new Date());
-              setProgress(0);
-            }}
-            renderInput={(params) => <TextField {...params} sx={{ mb: 4, width: '100%' }} />}
-            ampm={false}
-          />
-        </LocalizationProvider>
-        {targetDate && (
-          <Box>
-            <LinearProgress
-              variant="determinate"
-              value={progress}
-              sx={{ height: 10, borderRadius: 5, mb: 2 }}
+          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={heLocale}>
+            <DateTimePicker
+              label="בחר תאריך ושעה"
+              value={targetDate}
+              onChange={(value) => {
+                setTargetDate(value);
+                setStartDate(new Date());
+                setProgress(0);
+              }}
+              renderInput={(params) => <TextField {...params} sx={{ mb: 4, width: '100%', }} />}
+              ampm={false}
             />
-            <Typography variant="body2" color="text.secondary" mb={1}>
-              {progress.toFixed(0)}%
-            </Typography>
-            <Typography variant="h5" color="secondary.main" fontWeight={600} mb={2}>
-              נותרו:
-            </Typography>
-            <Grid container spacing={2} justifyContent="center">
-              <Grid item>
-                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary.light' }}>
-                  <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.days}</Typography>
-                  <Typography color="secondary.main">ימים</Typography>
-                </Paper>
+          </LocalizationProvider>
+          {targetDate && (
+            <Box>
+              <Typography variant="body2" color="text.secondary" mb={1} margin={2}>
+                {progress.toFixed(0)}%
+              </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={progress}
+                sx={{ height: 10, borderRadius: 5, mb: 2, marginBottom: 5 }}
+              />
+
+              <Typography variant="h5" color="secondary.main" fontWeight={600} mb={2}>
+                נותרו:
+              </Typography>
+              <Grid container spacing={2} justifyContent="center">
+                <Grid item>
+                  <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary' }}>
+                    <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.days}</Typography>
+                    <Typography color="secondary.main">ימים</Typography>
+                  </Paper>
+                </Grid>
+                <Grid item>
+                  <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary' }}>
+                    <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.hours}</Typography>
+                    <Typography color="secondary.main">שעות</Typography>
+                  </Paper>
+                </Grid>
+                <Grid item>
+                  <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary' }}>
+                    <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.minutes}</Typography>
+                    <Typography color="secondary.main">דקות</Typography>
+                  </Paper>
+                </Grid>
+                <Grid item>
+                  <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary' }}>
+                    <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.seconds}</Typography>
+                    <Typography color="secondary.main">שניות</Typography>
+                  </Paper>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary.light' }}>
-                  <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.hours}</Typography>
-                  <Typography color="secondary.main">שעות</Typography>
-                </Paper>
-              </Grid>
-              <Grid item>
-                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary.light' }}>
-                  <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.minutes}</Typography>
-                  <Typography color="secondary.main">דקות</Typography>
-                </Paper>
-              </Grid>
-              <Grid item>
-                <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary.light' }}>
-                  <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.seconds}</Typography>
-                  <Typography color="secondary.main">שניות</Typography>
-                </Paper>
-              </Grid>
-            </Grid>
-          </Box>
-        )}
+            </Box>
+          )}
         </Paper>
       </Container>
     </Box>
