@@ -1,0 +1,88 @@
+import { useState, useEffect } from 'react'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+import LinearProgress from '@mui/material/LinearProgress'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+
+function Timer({ name, targetDate, startDate }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    if (!targetDate || !startDate) return
+
+    const interval = setInterval(() => {
+      const now = new Date()
+      const diff = targetDate - now
+
+      if (diff > 0) {
+        const total = targetDate - startDate
+        const passed = now - startDate
+        const progressValue = Math.min(100, Math.max(0, (passed / total) * 100))
+        setProgress(progressValue)
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+        const minutes = Math.floor((diff / (1000 * 60)) % 60)
+        const seconds = Math.floor((diff / 1000) % 60)
+        setTimeLeft({ days, hours, minutes, seconds })
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+        setProgress(100)
+      }
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [targetDate, startDate])
+
+  if (!targetDate) return null
+
+  return (
+    <Paper elevation={6} sx={{ p: 5, borderRadius: 5, textAlign: 'center', bgcolor: 'background.paper', mb: 3 }}>
+      <Typography variant="h3" fontWeight={700} color="primary.main" mb={3}>
+        <AccessTimeIcon sx={{ fontSize: 40, verticalAlign: 'middle', mr: 1 }} />
+        {name}
+      </Typography>
+      <Box>
+        <Typography variant="body2" color="text.secondary" mb={1} margin={2}>
+          {progress.toFixed(0)}%
+        </Typography>
+        <LinearProgress variant="determinate" value={progress} sx={{ height: 10, borderRadius: 5, mb: 2, marginBottom: 5 }} />
+
+        <Typography variant="h5" color="secondary.main" fontWeight={600} mb={2}>
+          נותרו:
+        </Typography>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid item>
+            <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary' }}>
+              <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.days}</Typography>
+              <Typography color="secondary.main">ימים</Typography>
+            </Paper>
+          </Grid>
+          <Grid item>
+            <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary' }}>
+              <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.hours}</Typography>
+              <Typography color="secondary.main">שעות</Typography>
+            </Paper>
+          </Grid>
+          <Grid item>
+            <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary' }}>
+              <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.minutes}</Typography>
+              <Typography color="secondary.main">דקות</Typography>
+            </Paper>
+          </Grid>
+          <Grid item>
+            <Paper elevation={2} sx={{ p: 2, borderRadius: 3, minWidth: 70, bgcolor: 'primary' }}>
+              <Typography variant="h4" color="primary.main" fontWeight={700}>{timeLeft.seconds}</Typography>
+              <Typography color="secondary.main">שניות</Typography>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
+    </Paper>
+  )
+}
+
+export default Timer
