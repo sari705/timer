@@ -98,7 +98,6 @@ function Timer({ id, name, targetDate, startDate, onDelete, onRename }) {
         ) : (
           <>
             <Typography variant="h3" fontWeight={700} color="primary.main">
-              <AccessTimeIcon sx={{ fontSize: 40, verticalAlign: 'middle', mr: 1 }} />
               {name}
             </Typography>
             <Box>
