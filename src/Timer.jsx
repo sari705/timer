@@ -4,12 +4,24 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import LinearProgress from '@mui/material/LinearProgress'
+import IconButton from '@mui/material/IconButton'
+import TextField from '@mui/material/TextField'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
+import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
 
-function Timer({ name, targetDate, startDate }) {
+function Timer({ id, name, targetDate, startDate, onDelete, onRename }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
   const [timePassed, setTimePassed] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
   const [progress, setProgress] = useState(0)
+  const [editMode, setEditMode] = useState(false)
+  const [editedName, setEditedName] = useState(name)
+
+  useEffect(() => {
+    setEditedName(name)
+  }, [name])
 
   useEffect(() => {
     if (!targetDate || !startDate) return
@@ -55,11 +67,51 @@ function Timer({ name, targetDate, startDate }) {
   if (!targetDate) return null
 
   return (
-    <Paper elevation={6} sx={{ p: 5, borderRadius: 5, textAlign: 'center', bgcolor: 'background.paper', mb: 3 }}>
-      <Typography variant="h3" fontWeight={700} color="primary.main" mb={3}>
-        <AccessTimeIcon sx={{ fontSize: 40, verticalAlign: 'middle', mr: 1 }} />
-        {name}
-      </Typography>
+    <Paper elevation={6} sx={{ p: 5, borderRadius: 5, bgcolor: 'background.paper', mb: 3, textAlign: 'center' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        {editMode ? (
+          <>
+            <TextField
+              value={editedName}
+              onChange={(e) => setEditedName(e.target.value)}
+              size="small"
+              sx={{ flexGrow: 1, ml: 1 }}
+            />
+            <IconButton
+              color="primary"
+              onClick={() => {
+                onRename(id, editedName)
+                setEditMode(false)
+              }}
+            >
+              <SaveIcon />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                setEditMode(false)
+                setEditedName(name)
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </>
+        ) : (
+          <>
+            <Typography variant="h3" fontWeight={700} color="primary.main">
+              <AccessTimeIcon sx={{ fontSize: 40, verticalAlign: 'middle', mr: 1 }} />
+              {name}
+            </Typography>
+            <Box>
+              <IconButton onClick={() => setEditMode(true)} sx={{ mr: 1 }}>
+                <EditIcon />
+              </IconButton>
+              <IconButton color="error" onClick={() => onDelete(id)}>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          </>
+        )}
+      </Box>
       <Box>
         <Typography variant="body2" color="text.secondary" mb={1} margin={2}>
           {progress.toFixed(0)}%

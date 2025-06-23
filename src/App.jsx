@@ -41,6 +41,14 @@ function App() {
     setNewTarget(null)
   }
 
+  const handleDelete = (id) => {
+    setTimers(timers.filter((t) => t.id !== id))
+  }
+
+  const handleRename = (id, name) => {
+    setTimers(timers.map((t) => (t.id === id ? { ...t, name } : t)))
+  }
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'linear-gradient(135deg, #e0f7fa 0%, #fff 100%)', p: 2 }}>
       <Container maxWidth="sm">
@@ -62,7 +70,15 @@ function App() {
           </Button>
         </Box>
         {timers.map((t) => (
-          <Timer key={t.id} name={t.name} targetDate={t.targetDate} startDate={t.startDate} />
+          <Timer
+            key={t.id}
+            id={t.id}
+            name={t.name}
+            targetDate={t.targetDate}
+            startDate={t.startDate}
+            onDelete={handleDelete}
+            onRename={handleRename}
+          />
         ))}
       </Container>
     </Box>
