@@ -51,7 +51,6 @@ function App() {
           <TextField label="שם הטיימר" value={newName} onChange={(e) => setNewName(e.target.value)} fullWidth sx={{ mb: 2 }} />
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={heLocale}>
             <DateTimePicker
-              label="בחר תאריך ושעה"
               value={newTarget}
               onChange={(value) => setNewTarget(value)}
               renderInput={(params) => <TextField {...params} sx={{ mb: 2, width: '100%' }} />}
