@@ -8,21 +8,33 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime'
 
 function Timer({ name, targetDate, startDate }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+  const [timePassed, setTimePassed] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     if (!targetDate || !startDate) return
 
-    const interval = setInterval(() => {
+    const update = () => {
       const now = new Date()
       const diff = targetDate - now
 
-      if (diff > 0) {
-        const total = targetDate - startDate
-        const passed = now - startDate
-        const progressValue = Math.min(100, Math.max(0, (passed / total) * 100))
-        setProgress(progressValue)
+      const total = targetDate - startDate
+      const passed = now - startDate
+      const progressValue = Math.min(100, Math.max(0, (passed / total) * 100))
+      setProgress(progressValue)
 
+      const daysPassed = Math.floor(passed / (1000 * 60 * 60 * 24))
+      const hoursPassed = Math.floor((passed / (1000 * 60 * 60)) % 24)
+      const minutesPassed = Math.floor((passed / (1000 * 60)) % 60)
+      const secondsPassed = Math.floor((passed / 1000) % 60)
+      setTimePassed({
+        days: daysPassed,
+        hours: hoursPassed,
+        minutes: minutesPassed,
+        seconds: secondsPassed,
+      })
+
+      if (diff > 0) {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24))
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
         const minutes = Math.floor((diff / (1000 * 60)) % 60)
@@ -32,7 +44,10 @@ function Timer({ name, targetDate, startDate }) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
         setProgress(100)
       }
-    }, 1000)
+    }
+
+    update()
+    const interval = setInterval(update, 1000)
 
     return () => clearInterval(interval)
   }, [targetDate, startDate])
@@ -49,7 +64,13 @@ function Timer({ name, targetDate, startDate }) {
         <Typography variant="body2" color="text.secondary" mb={1} margin={2}>
           {progress.toFixed(0)}%
         </Typography>
-        <LinearProgress variant="determinate" value={progress} sx={{ height: 10, borderRadius: 5, mb: 2, marginBottom: 5 }} />
+        <LinearProgress variant="determinate" value={progress} sx={{ height: 10, borderRadius: 5, mb: 2, marginBottom: 2 }} />
+        <Typography variant="body2" color="text.secondary" mb={1}>
+          הוגדר ב: {startDate.toLocaleString('he-IL')}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" mb={2}>
+          עברו: {timePassed.days} ימים {timePassed.hours} שעות {timePassed.minutes} דקות {timePassed.seconds} שניות
+        </Typography>
 
         <Typography variant="h5" color="secondary.main" fontWeight={600} mb={2}>
           נותרו:
