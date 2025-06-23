@@ -58,7 +58,7 @@ function App() {
               ampm={false}
             />
           </LocalizationProvider>
-          <Button variant="contained" onClick={handleAdd} sx={{ mt: 2 }} disabled={!newName || !newTarget}>
+          <Button variant="contained" onClick={handleAdd} sx={{ mt: 2, margin: 2 }} disabled={!newName || !newTarget}>
             הוסף
           </Button>
         </Box>
